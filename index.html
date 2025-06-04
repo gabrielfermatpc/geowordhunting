@@ -27,7 +27,7 @@
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 780px; 
+            max-width: 600px; /* Ajustado para tabuleiro 10x10 */
             --grid-cell-gap: 4px; 
         }
 
@@ -69,8 +69,8 @@
         /* Container da Grade, Cabeçalhos de Linha/Coluna e Canto */
         #game-grid-area {
             display: grid;
-            grid-template-columns: minmax(32px, auto) 1fr; /* Aumentado o min para a coluna de números */
-            grid-template-rows: minmax(32px, auto) 1fr;    /* Aumentado o min para a linha de números */
+            grid-template-columns: minmax(32px, auto) 1fr; 
+            grid-template-rows: minmax(32px, auto) 1fr;    
             gap: 5px; 
             padding: 5px; 
             background-color: #e2e8f0; /* slate-200 */
@@ -84,7 +84,7 @@
             grid-column: 2 / 3; 
             grid-row: 1 / 2;    
             display: grid;
-            grid-template-columns: repeat(var(--grid-size, 15), minmax(0, 1fr));
+            grid-template-columns: repeat(var(--grid-size, 10), minmax(0, 1fr)); /* Ajustado para novo gridSize */
             gap: var(--grid-cell-gap);
         }
 
@@ -92,7 +92,7 @@
             grid-column: 1 / 2; 
             grid-row: 2 / 3;    
             display: grid;
-            grid-template-rows: repeat(var(--grid-size, 15), minmax(0, 1fr));
+            grid-template-rows: repeat(var(--grid-size, 10), minmax(0, 1fr)); /* Ajustado para novo gridSize */
             gap: var(--grid-cell-gap);
         }
         
@@ -112,7 +112,7 @@
             grid-column: 2 / 3; 
             grid-row: 2 / 3;
             display: grid;
-            grid-template-columns: repeat(var(--grid-size, 15), 1fr);
+            grid-template-columns: repeat(var(--grid-size, 10), 1fr); /* Ajustado para novo gridSize */
             gap: var(--grid-cell-gap);
             border: none;
             padding: 2px; 
@@ -181,8 +181,7 @@
                 --grid-cell-gap: 2px; 
             }
             #game-grid-area {
-                /* padding e gap mantidos da regra geral para consistência, min-width é a chave aqui */
-                min-width: 320px; /* Garante largura mínima para a grelha */
+                min-width: 260px; /* Ajustado para grelha 10x10 */
             }
             #grid-container.grid {
                 padding: 1px;
@@ -242,20 +241,20 @@
     </div>
 
     <script>
-        const gridSize = 15; 
-        const wordsData = [
-            { text: "VÉRTICE", startRow: 1, startCol: 1, direction: "horizontal", found: false },
-            { text: "ARESTA", startRow: 3, startCol: 0, direction: "horizontal", found: false },
-            { text: "FACE", startRow: 5, startCol: 7, direction: "horizontal_reverse", found: false },
-            { text: "VOLUME", startRow: 0, startCol: 7, direction: "vertical", found: false },
-            { text: "ÁREA", startRow: 13, startCol: 2, direction: "horizontal", found: false }, 
-            { text: "CUBO", startRow: 0, startCol: 0, direction: "diagonal_dr", found: false }, 
-            { text: "CONE", startRow: 7, startCol: 1, direction: "vertical", found: false },
-            { text: "ESFERA", startRow: 10, startCol: 14, direction: "vertical_reverse", found: false },
-            { text: "PRISMA", startRow: 14, startCol: 5, direction: "horizontal_reverse", found: false },
-            { text: "ALTURA", startRow: 2, startCol: 12, direction: "vertical", found: false },
-            { text: "DIAGONAL", startRow: 7, startCol: 0, direction: "diagonal_dr", found: false }, 
-            { text: "PONTO", startRow: 9, startCol: 4, direction: "horizontal", found: false },
+        const gridSize = 10; // Reduzido para 10x10
+        const wordsData = [ // Palavras e posições ajustadas para grelha 10x10
+            { text: "VÉRTICE", startRow: 0, startCol: 0, direction: "horizontal", found: false }, 
+            { text: "ARESTA", startRow: 2, startCol: 1, direction: "horizontal", found: false }, 
+            { text: "FACE", startRow: 1, startCol: 8, direction: "vertical", found: false },   
+            { text: "VOLUME", startRow: 9, startCol: 0, direction: "horizontal", found: false },
+            { text: "ÁREA", startRow: 4, startCol: 0, direction: "vertical", found: false },     
+            { text: "CUBO", startRow: 5, startCol: 5, direction: "diagonal_dr", found: false },
+            { text: "CONE", startRow: 8, startCol: 1, direction: "horizontal", found: false },  
+            { text: "ESFERA", startRow: 0, startCol: 9, direction: "vertical", found: false },  
+            { text: "PRISMA", startRow: 7, startCol: 5, direction: "horizontal_reverse", found: false }, 
+            { text: "ALTURA", startRow: 5, startCol: 4, direction: "vertical_reverse", found: false }, // Corrigido startRow de 4 para 5
+            { text: "DIAGONAL", startRow: 0, startCol: 1, direction: "diagonal_dr", found: false }, 
+            { text: "PONTO", startRow: 6, startCol: 4, direction: "horizontal_reverse", found: false } 
         ];
 
         let grid = []; 
@@ -315,7 +314,7 @@
                         grid[r][c] = normalizedWord[i];
                         wordObj.cells.push({ r, c });
                     } else {
-                        console.error(`Palavra "${wordObj.text}" não coube na grade na direção ${direction}. Verifique as coordenadas e o tamanho.`);
+                        console.error(`Palavra "${wordObj.text}" (${normalizedWord}) não coube na grade ${gridSize}x${gridSize} na posição ${r},${c} (direção ${direction}). Verifique as coordenadas e o tamanho.`);
                         wordObj.cells = []; 
                         break; 
                     }
